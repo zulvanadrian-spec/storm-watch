@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+event_live.csv
+model_petir.joblib
+*.dll
+.venv/

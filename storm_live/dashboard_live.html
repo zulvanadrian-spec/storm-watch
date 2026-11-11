@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UBP Storm Watch - Live</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --teks: #0f172a;
+      --abu: #64748b;
+      --garis: #e2e8f0
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--teks);
+      line-height: 1.5
+    }
+
+    header {
+      background: #0f172a;
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 21px
+    }
+
+    header small {
+      color: #94a3b8
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 14px
+    }
+
+    .kartu {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px #0001
+    }
+
+    .status {
+      font-size: 20px;
+      font-weight: 600;
+      border-left: 6px solid #16a34a
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px
+    }
+
+    .angka small {
+      color: var(--abu);
+      display: block
+    }
+
+    .angka b {
+      font-size: 28px
+    }
+
+    .abu {
+      color: var(--abu);
+      font-size: 13px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px
+    }
+
+    th,
+    td {
+      padding: 6px;
+      border-bottom: 1px solid var(--garis);
+      text-align: left
+    }
+
+    .pil {
+      padding: 2px 9px;
+      border-radius: 99px;
+      color: #fff;
+      font-size: 12px
+    }
+
+    #err {
+      display: none;
+      background: #fee2e2;
+      border-left: 6px solid #dc2626;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px
+    }
+
+    details {
+      padding: 4px 0
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600
+    }
+
+    canvas {
+      max-height: 300px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>⚡ UBP Storm Watch — Live</h1><small id="info">menghubungkan...</small>
+  </header>
+  <main>
+    <div id="err"></div>
+    <div class="kartu status" id="status">Menunggu data...</div>
+    <div class="grid">
+      <div class="kartu angka"><small>Total sinyal masuk</small><b id="k1">-</b></div>
+      <div class="kartu angka"><small>Sinyal ditebak petir (60 interval terakhir)</small><b id="k2">-</b></div>
+      <div class="kartu angka"><small>Curah hujan terbaru (mm)</small><b id="k3">-</b></div>
+      <div class="kartu angka"><small>Interval ramai tidak biasa</small><b id="k4">-</b></div>
+    </div>
+    <div class="kartu"><b>Sinyal per interval vs hujan</b>
+      <p class="abu">Tiap batang = jumlah sinyal radio dalam satu interval waktu. <span style="color:#dc2626">■
+          Merah</span> = ditebak petir oleh model, <span style="color:#94a3b8">■ abu</span> = ditebak bukan petir. <span
+          style="color:#0ea5e9">━ Garis biru</span> = curah hujan. Kalau batang merah naik <b>dan</b> hujan naik
+        bersamaan, kemungkinan besar petir.</p>
+      <canvas id="c"></canvas>
+    </div>
+    <div class="kartu"><b>8 sinyal terakhir</b>
+      <table>
+        <thead>
+          <tr>
+            <th>Jam (UTC)</th>
+            <th>Kekuatan</th>
+            <th>Durasi (ms)</th>
+            <th>Waktu naik (µs)</th>
+            <th>Tebakan model</th>
+          </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+    <div class="kartu">
+      <details>
+        <summary>Cara kerja (teknis, buat belajar)</summary>
+        <p>Alur:
+          <code>alat/simulator → POST /event → server → model Decision Tree menebak → diringkas per interval → GET /ringkasan → dashboard (polling tiap 3 detik)</code>.
+        </p>
+        <p><b>Kenapa tidak jebol?</b> Dashboard tidak pernah menerima data mentah. Server meringkas jadi 60 titik, dan
+          grafik diperbarui dengan <code>chart.update()</code>, bukan dibuat ulang.</p>
+        <p><b>Interval ramai:</b> z-score = (jumlah − rata-rata 30 interval sebelumnya) ÷ simpangan baku. Jika z &gt; 3
+          dan jumlah ≥ 5, ditandai ramai.</p>
+        <p><b>Tebakan model</b> memakai 4 ciri sinyal (kekuatan, durasi, waktu naik, jumlah pulsa). Cuaca tidak ikut
+          menebak, hanya jadi pembanding.</p>
+        <p class="abu">Data masih simulasi. Istilah yang benar: "RF event kandidat". Bukan alat peringatan dini resmi
+          dan tidak memprediksi hujan.</p>
+      </details>
+    </div>
+  </main>
+  
+  <script>
+    const $ = id => document.getElementById(id); let grafik;
+    async function muat() {
+      try {
+        const r = await fetch("/ringkasan?bucket=10&n=60"); if (!r.ok) throw new Error("HTTP " + r.status);
+        const d = await r.json(); $("err").style.display = "none"; tampil(d);
+      } catch (e) { const el = $("err"); el.style.display = "block"; el.textContent = "Server tidak terjangkau (" + e.message + "). Pastikan server.py jalan dan halaman dibuka lewat http://127.0.0.1:8000"; }
+    }
+    function tampil(d) {
+      const s = d.seri, label = s.map(x => new Date(x.t * 1000).toISOString().slice(11, 19));
+      const petir = s.map(x => x.n_petir), lain = s.map(x => x.n_event - x.n_petir), hujan = s.map(x => x.hujan);
+      const nPetir = petir.reduce((a, b) => a + b, 0), nRamai = s.filter(x => x.anomali).length, ch = d.cuaca_terbaru ? d.cuaca_terbaru.hujan : null;
+      $("info").textContent = d.info + (d.model_siap ? "" : " | MODEL BELUM DILATIH");
+      $("k1").textContent = d.total_event; $("k2").textContent = d.model_siap ? nPetir : "-";
+      $("k3").textContent = ch === null ? "-" : ch.toFixed(1); $("k4").textContent = nRamai;
+      const akhir = s.slice(-3), aktif = akhir.reduce((a, x) => a + x.n_petir, 0), hujanAkhir = ch !== null && ch >= 5;
+      const st = $("status");
+      if (aktif >= 5 && hujanAkhir) { st.textContent = "⚠️ Aktivitas petir tinggi, cuaca hujan deras"; st.style.borderColor = "#dc2626" }
+      else if (aktif >= 5) { st.textContent = "🔎 Sinyal ramai tapi cuaca tenang, perlu dicek (bisa jadi bukan petir)"; st.style.borderColor = "#f59e0b" }
+      else { st.textContent = "✅ Normal, tidak ada lonjakan sinyal"; st.style.borderColor = "#16a34a" }
+      const data = {
+        labels: label, datasets: [
+          { type: "bar", label: "Ditebak petir", data: petir, backgroundColor: "#dc2626", stack: "a", yAxisID: "y" },
+          { type: "bar", label: "Ditebak bukan petir", data: lain, backgroundColor: "#94a3b8", stack: "a", yAxisID: "y" },
+          { type: "line", label: "Curah hujan (mm)", data: hujan, borderColor: "#0ea5e9", pointRadius: 0, yAxisID: "y2" }]
+      };
+      if (!grafik) { grafik = new Chart($("c"), { data, options: { animation: false, scales: { x: { stacked: true, ticks: { maxTicksLimit: 8 }, title: { display: true, text: "waktu (UTC)" } }, y: { stacked: true, title: { display: true, text: "jumlah sinyal" } }, y2: { position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "hujan (mm)" } } } } }) }
+      else { grafik.data = data; grafik.update("none") }
+      $("tb").innerHTML = d.terbaru.map(e => `<tr><td>${e.jam}</td><td>${e.sig}</td><td>${e.dur}</td><td>${e.rise}</td><td><span class="pil" style="background:${e.label === 1 ? "#dc2626" : "#64748b"}">${e.label === 1 ? "Kandidat petir" : e.label === 0 ? "Bukan petir" : "-"}</span></td></tr>`).join("") || "<tr><td colspan=5>Belum ada sinyal. Jalankan simulator.py</td></tr>";
+    }
+    muat(); setInterval(muat, 3000);
+  </script>
+</body>
+
+</html>
