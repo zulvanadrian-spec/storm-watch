@@ -137,6 +137,22 @@
   </header>
   <main>
     <div id="err"></div>
+    <!-- WIDGET PRAKIRAAN UNTUK ORANG AWAM -->
+    <div class="kartu" style="background: linear-gradient(135deg, #1e293b, #0f172a); color: #fff; border-left: 6px solid #3b82f6; padding: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="color: #93c5fd; font-weight: bold; font-size: 13px; letter-spacing: 0.5px;">🔮 ESTIMASI PRAKIRAAN CUACA & PETIR</span>
+        <span style="background: #2563eb; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600;" id="prediksi-waktu">10–30 Menit Ke Depan</span>
+      </div>
+      
+      <div id="prediksi-text" style="font-size: 16px; font-weight: 600; line-height: 1.5; color: #f8fafc; margin-bottom: 8px;">
+        Memuat estimasi prakiraan...
+      </div>
+
+      <small style="color: #94a3b8; font-size: 12px; display: block;">
+        💡 <i>Prakiraan ini dihitung otomatis berdasarkan tren frekuensi sinyal radio (RF) dan grafik hujan 1 menit terakhir.</i>
+      </small>
+    </div>
+
     <div class="kartu status" id="status">Menunggu data...</div>
     <div class="grid">
       <div class="kartu angka"><small>Total sinyal masuk</small><b id="k1">-</b></div>
@@ -144,6 +160,7 @@
       <div class="kartu angka"><small>Curah hujan terbaru (mm)</small><b id="k3">-</b></div>
       <div class="kartu angka"><small>Interval ramai tidak biasa</small><b id="k4">-</b></div>
     </div>
+
     <div class="kartu"><b>Sinyal per interval vs hujan</b>
       <p class="abu">Tiap batang = jumlah sinyal radio dalam satu interval waktu. <span style="color:#dc2626">■
           Merah</span> = ditebak petir oleh model, <span style="color:#94a3b8">■ abu</span> = ditebak bukan petir. <span
@@ -151,6 +168,7 @@
         bersamaan, kemungkinan besar petir.</p>
       <canvas id="c"></canvas>
     </div>
+
     <div class="kartu"><b>8 sinyal terakhir</b>
       <table>
         <thead>
@@ -165,6 +183,7 @@
         <tbody id="tb"></tbody>
       </table>
     </div>
+
     <div class="kartu">
       <details>
         <summary>Cara kerja (teknis, buat belajar)</summary>
@@ -191,13 +210,24 @@
         const d = await r.json(); $("err").style.display = "none"; tampil(d);
       } catch (e) { const el = $("err"); el.style.display = "block"; el.textContent = "Server tidak terjangkau (" + e.message + "). Pastikan server.py jalan dan halaman dibuka lewat http://127.0.0.1:8000"; }
     }
+
     function tampil(d) {
       const s = d.seri, label = s.map(x => new Date(x.t * 1000).toISOString().slice(11, 19));
       const petir = s.map(x => x.n_petir), lain = s.map(x => x.n_event - x.n_petir), hujan = s.map(x => x.hujan);
       const nPetir = petir.reduce((a, b) => a + b, 0), nRamai = s.filter(x => x.anomali).length, ch = d.cuaca_terbaru ? d.cuaca_terbaru.hujan : null;
+
       $("info").textContent = d.info + (d.model_siap ? "" : " | MODEL BELUM DILATIH");
       $("k1").textContent = d.total_event; $("k2").textContent = d.model_siap ? nPetir : "-";
       $("k3").textContent = ch === null ? "-" : ch.toFixed(1); $("k4").textContent = nRamai;
+
+      // Update Teks & Durasi Prediksi ke UI
+      if (d.prediksi_next) {
+        $("prediksi-text").textContent = d.prediksi_next.ringkasan_prakiraan;
+        if (d.prediksi_next.waktu_estimasi) {
+          $("prediksi-waktu").textContent = d.prediksi_next.waktu_estimasi;
+        }
+      }
+      
       const akhir = s.slice(-3), aktif = akhir.reduce((a, x) => a + x.n_petir, 0), hujanAkhir = ch !== null && ch >= 5;
       const st = $("status");
       if (aktif >= 5 && hujanAkhir) { st.textContent = "⚠️ Aktivitas petir tinggi, cuaca hujan deras"; st.style.borderColor = "#dc2626" }

@@ -1,3 +1,8 @@
+'''
+program yang akan menerima catatan mengirim ke AI models
+lalu meringkasnya
+'''
+
 import csv, os, threading, time
 from collections import deque
 from typing import Optional
@@ -115,12 +120,36 @@ def ringkasan(bucket: int = 10, n: int = 60):
                       "connection_status": "online" if online else "offline",
                       "last_seen": time.strftime("%H:%M:%S", time.localtime(terakhir_t)),
                       "sensor_status": "Menerima sinyal" if online else "Tidak ada sinyal"}]
+
+    # =========================================================
+    # LOGIKA PREDIKSI / ESTIMASI WAKTU BERIKUTNYA
+    # =========================================================
+    data_terakhir = seri[-6:]  # Ambil data ~1 menit terakhir
+    total_petir_baru = sum(x["n_petir"] for x in data_terakhir)
+    list_hujan_baru = [x["hujan"] for x in data_terakhir if x["hujan"] is not None]
+    rata_hujan = sum(list_hujan_baru) / len(list_hujan_baru) if list_hujan_baru else 0.0
+
+    # Penentuan status prediksi
+    prediksi_petir_next = "POTENSI TINGGI" if total_petir_baru >= 3 else "NORMAL / RENDAH"
+    prediksi_cuaca_next = "HUJAN LEBAT" if rata_hujan > 2.0 else ("HUJAN RINGAN" if rata_hujan > 0 else "CERAH / BERAWAN")
+
     return {
         "total_petir": total_petir, "cuaca_riwayat": cuaca_riwayat, "perangkat": perangkat,
         "petir_terbaru": [{"t": e["t"], "sig": round(e["sig"], 1), "dur": round(e["dur"], 2), "rise": round(e["rise"], 1)} for e in petir_terbaru],
         "info": "DATA SIMULASI. RF event kandidat, bukan deteksi petir resmi.",
-        "model_siap": PAKET is not None, "bucket_detik": bucket, "total_event": total,
-        "seri": seri, "cuaca_terbaru": cuaca_terbaru,
+        "model_siap": PAKET is not None,
+        "bucket_detik": bucket,
+        "total_event": total,
+        "seri": seri,
+        "cuaca_terbaru": cuaca_terbaru,
+
+        "prediksi_next": {
+            "waktu_estimasi": "10–30 Menit Ke Depan",
+            "petir": prediksi_petir_next,
+            "cuaca": prediksi_cuaca_next,
+            "ringkasan_prakiraan": f"Dalam 10–30 menit ke depan, kondisi cuaca diperkirakan {prediksi_cuaca_next} dengan potensi petir {prediksi_petir_next}."
+        },
+        
         "terbaru": [{"jam": time.strftime("%H:%M:%S", time.gmtime(e["t"])), "sig": round(e["sig"], 1),
                      "dur": round(e["dur"], 2), "rise": round(e["rise"], 1), "label": e["label"]} for e in terbaru],
     }
