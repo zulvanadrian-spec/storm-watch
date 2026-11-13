@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UBP Storm Watch | Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/monitoring.css">
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="bi bi-cloud-lightning-rain-fill"></i>
+                </div>
+
+                <div>
+                    <h5>STORM WATCH</h5>
+                    <span>UBP Monitoring System</span>
+                </div>
+            </div>
+
+            <div class="sidebar-label">MAIN MENU</div>
+
+            <nav class="sidebar-nav">
+
+                <a href="#overview" class="nav-link active">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Overview</span>
+                </a>
+
+                <a href="#lightning" class="nav-link">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                    <span>Lightning Monitoring</span>
+                </a>
+
+                <a href="#weather" class="nav-link">
+                    <i class="bi bi-cloud-sun-fill"></i>
+                    <span>Weather Monitoring</span>
+                </a>
+
+                <a href="#map" class="nav-link">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span>Map Monitoring</span>
+                </a>
+
+                <a href="#devices" class="nav-link">
+                    <i class="bi bi-cpu-fill"></i>
+                    <span>Devices</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="system-info">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>System Status</strong>
+                        <small>Menunggu koneksi backend</small>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    UBP STORM WATCH © 2026
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN AREA -->
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+
+                    <div>
+                        <h6 id="pageTitle">Overview Dashboard</h6>
+                        <span>Lightning & Weather Monitoring</span>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="live-indicator">
+                        <span class="status-dot"></span>
+                        WAITING FOR DATA
+                    </div>
+
+                    <div class="current-time" id="currentTime">
+                        --:--:--
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- PAGE CONTENT -->
+            <section class="content-area page-section" id="overview">
+
+                <div class="welcome-section">
+                    <div>
+                        <h3>Monitoring Overview</h3>
+                        <p>
+                            Pantau aktivitas petir dan kondisi cuaca
+                            secara terpusat.
+                        </p>
+                    </div>
+
+                    <div class="date-info">
+                        <i class="bi bi-calendar3"></i>
+                        <span id="currentDate">Memuat tanggal...</span>
+                    </div>
+                </div>
+
+
+                <!-- STATISTICS -->
+                <div class="section-heading">
+                    <h5>System Overview</h5>
+                    <span>Real-time monitoring</span>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Total Lightning</span>
+                            <i class="bi bi-lightning-charge-fill yellow"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Belum ada data deteksi</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Temperature</span>
+                            <i class="bi bi-thermometer-half blue"></i>
+                        </div>
+
+                        <h2>— <small>°C</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Humidity</span>
+                            <i class="bi bi-droplet-fill cyan"></i>
+                        </div>
+
+                        <h2>— <small>%</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Device Status</span>
+                            <i class="bi bi-cpu-fill purple"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Status belum tersedia</small>
+                    </div>
+
+                </div>
+
+
+                <!-- MONITORING PANELS -->
+                <div class="section-heading">
+                    <h5>Monitoring Activity</h5>
+                    <span>Data visualization</span>
+                </div>
+
+                <div class="monitoring-grid">
+
+                    <div class="panel-card">
+
+                        <div class="panel-header">
+                            <div>
+                                <h6>Lightning Activity</h6>
+                                <span>Riwayat aktivitas petir</span>
+                            </div>
+
+                            <i class="bi bi-lightning-charge-fill yellow"></i>
+                        </div>
+
+                        <div class="empty-state">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <h6>No Data Available</h6>
+                            <p>
+                                Grafik akan ditampilkan setelah
+                                perangkat mengirimkan data petir.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-card">
+
+                        <div class="panel-header">
+                            <div>
+                                <h6>Weather Monitoring</h6>
+                                <span>Riwayat kondisi cuaca</span>
+                            </div>
+
+                            <i class="bi bi-cloud-sun-fill blue"></i>
+                        </div>
+
+                        <div class="empty-state">
+                            <i class="bi bi-cloud-slash"></i>
+                            <h6>No Data Available</h6>
+                            <p>
+                                Grafik cuaca akan tersedia setelah
+                                sensor mengirimkan pengukuran.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEVICE TABLE -->
+                <div class="panel-card device-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h6>Device Information</h6>
+                            <span>Informasi perangkat monitoring</span>
+                        </div>
+
+                        <i class="bi bi-cpu blue"></i>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Device Name</th>
+                                    <th>Device Type</th>
+                                    <th>Status</th>
+                                    <th>Last Seen</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        Belum ada perangkat terdaftar
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+                <footer class="main-footer">
+                    UBP Storm Watch — Lightning and Weather Monitoring System
+                </footer>
+
+            </section>
+
+
+            <!-- =====================================
+                    LIGHTNING MONITORING PAGE
+            ====================================== -->
+
+            <section class="content-area page-section d-none" id="lightning">
+
+                <div class="welcome-section">
+                    <div>
+                        <h3>Lightning Monitoring</h3>
+                        <p>
+                            Monitoring aktivitas dan riwayat deteksi petir.
+                        </p>
+                    </div>
+
+                    <div class="date-info">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        Lightning Detection
+                    </div>
+                </div>
+
+
+                <!-- LIGHTNING STATISTICS -->
+
+                <div class="section-heading">
+                    <h5>Lightning Statistics</h5>
+                    <span>Data dari perangkat</span>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Total Deteksi Petir</span>
+                            <i class="bi bi-lightning-charge-fill yellow"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Belum ada data deteksi</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Last Detection</span>
+                            <i class="bi bi-clock-history blue"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Belum tersedia</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Lightning Intensity</span>
+                            <i class="bi bi-activity purple"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Detection Status</span>
+                            <i class="bi bi-broadcast cyan"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Belum tersedia</small>
+                    </div>
+
+                </div>
+
+
+                <!-- LIGHTNING CHART -->
+
+                <div class="section-heading">
+                    <h5>Lightning Detection History</h5>
+                    <span>Historical data</span>
+                </div>
+
+                <div class="panel-card">
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-lightning-charge"></i>
+
+                        <h6>No Lightning Data Available</h6>
+
+                        <p>
+                            Grafik aktivitas petir akan muncul setelah
+                            perangkat mengirimkan data deteksi.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LIGHTNING TABLE -->
+
+                <div class="section-heading">
+                    <h5>Detection Records</h5>
+                    <span>Riwayat deteksi petir</span>
+                </div>
+
+                <div class="panel-card">
+
+                    <div class="table-responsive">
+
+                        <table class="table custom-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Detection Time</th>
+                                    <th>Intensity</th>
+                                    <th>Distance</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        Belum ada riwayat deteksi petir
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                    WEATHER MONITORING PAGE
+            ====================================== -->
+
+            <section class="content-area page-section d-none" id="weather">
+
+                <div class="welcome-section">
+                    <div>
+                        <h3>Weather Monitoring</h3>
+
+                        <p>
+                            Monitoring parameter cuaca dari sensor perangkat.
+                        </p>
+                    </div>
+
+                    <div class="date-info">
+                        <i class="bi bi-cloud-sun"></i>
+                        Weather Monitoring
+                    </div>
+                </div>
+
+
+                <!-- WEATHER STATISTICS -->
+
+                <div class="section-heading">
+                    <h5>Weather Parameters</h5>
+                    <span>Data pengukuran sensor</span>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Temperature</span>
+                            <i class="bi bi-thermometer-half blue"></i>
+                        </div>
+
+                        <h2>— <small>°C</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Humidity</span>
+                            <i class="bi bi-droplet-fill cyan"></i>
+                        </div>
+
+                        <h2>— <small>%</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Air Pressure</span>
+                            <i class="bi bi-speedometer blue"></i>
+                        </div>
+
+                        <h2>— <small>hPa</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Wind Speed</span>
+                            <i class="bi bi-wind cyan"></i>
+                        </div>
+
+                        <h2>— <small>m/s</small></h2>
+                        <small>Menunggu pengukuran</small>
+                    </div>
+
+                </div>
+
+
+                <!-- ADDITIONAL WEATHER PARAMETERS -->
+
+                <div class="section-heading">
+                    <h5>Additional Parameters</h5>
+                    <span>Jika didukung perangkat</span>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Rainfall</span>
+                            <i class="bi bi-cloud-rain-fill blue"></i>
+                        </div>
+
+                        <h2>— <small>mm</small></h2>
+                        <small>Belum tersedia</small>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Wind Direction</span>
+                            <i class="bi bi-compass cyan"></i>
+                        </div>
+
+                        <h2>—</h2>
+                        <small>Belum tersedia</small>
+                    </div>
+
+                </div>
+
+
+                <!-- WEATHER CHART -->
+
+                <div class="section-heading">
+                    <h5>Weather History</h5>
+                    <span>Historical measurements</span>
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="empty-state">
+
+                        <i class="bi bi-cloud-slash"></i>
+
+                        <h6>No Weather Data Available</h6>
+
+                        <p>
+                            Grafik perubahan cuaca akan tersedia
+                            setelah sensor mengirimkan data.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEATHER TABLE -->
+
+                <div class="section-heading">
+                    <h5>Weather Records</h5>
+                    <span>Riwayat pengukuran</span>
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="table-responsive">
+
+                        <table class="table custom-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Measurement Time</th>
+                                    <th>Temperature</th>
+                                    <th>Humidity</th>
+                                    <th>Pressure</th>
+                                    <th>Wind Speed</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        Belum ada riwayat pengukuran cuaca
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                        MAP MONITORING PAGE
+            ====================================== -->
+
+            <section class="content-area page-section d-none" id="map">
+
+                <!-- PAGE HEADER -->
+                <div class="welcome-section">
+
+                    <div>
+                        <h3>Map Monitoring</h3>
+
+                        <p>
+                            Visualisasi lokasi perangkat dan aktivitas
+                            deteksi petir.
+                        </p>
+                    </div>
+
+                    <div class="date-info">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Geographic Monitoring
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION STATISTICS -->
+
+                <div class="section-heading">
+                    <h5>Location Overview</h5>
+                    <span>Informasi lokasi perangkat</span>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Device Location</span>
+                            <i class="bi bi-cpu-fill blue"></i>
+                        </div>
+
+                        <h2>—</h2>
+
+                        <small>Koordinat belum tersedia</small>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Lightning Locations</span>
+                            <i class="bi bi-lightning-charge-fill yellow"></i>
+                        </div>
+
+                        <h2>—</h2>
+
+                        <small>Belum ada koordinat deteksi</small>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Latitude</span>
+                            <i class="bi bi-globe blue"></i>
+                        </div>
+
+                        <h2>—</h2>
+
+                        <small>Menunggu data perangkat</small>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Longitude</span>
+                            <i class="bi bi-globe cyan"></i>
+                        </div>
+
+                        <h2>—</h2>
+
+                        <small>Menunggu data perangkat</small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MAP SECTION -->
+
+                <div class="section-heading">
+
+                    <h5>Geographic Map</h5>
+
+                    <span>Device and lightning location</span>
+
+                </div>
+
+
+                <div class="panel-card map-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h6>Storm Watch Map</h6>
+
+                            <span>
+                                Peta pemantauan geografis
+                            </span>
+                        </div>
+
+                        <i class="bi bi-map blue"></i>
+
+                    </div>
+
+
+                    <!-- MAP CONTAINER -->
+
+                    <div id="stormMap" class="map-container">
+
+                        <div class="map-empty-state">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <h6>Location Data Not Available</h6>
+
+                            <p>
+                                Peta akan menampilkan lokasi perangkat
+                                setelah koordinat tersedia dari backend.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MAP LEGEND -->
+
+                    <div class="map-legend">
+
+                        <div>
+                            <span class="legend-device"></span>
+                            Device Location
+                        </div>
+
+                        <div>
+                            <span class="legend-lightning"></span>
+                            Lightning Detection
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COORDINATE INFORMATION -->
+
+                <div class="section-heading">
+
+                    <h5>Location Information</h5>
+
+                    <span>Coordinate records</span>
+
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="table-responsive">
+
+                        <table class="table custom-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Location Type</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>Detection Time</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td colspan="4" class="text-center">
+                                        Belum ada data koordinat
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+     DEVICE MONITORING PAGE
+====================================== -->
+
+            <section class="content-area page-section d-none" id="devices">
+
+                <!-- PAGE HEADER -->
+
+                <div class="welcome-section">
+
+                    <div>
+                        <h3>Device Monitoring</h3>
+
+                        <p>
+                            Monitor status dan aktivitas perangkat
+                            UBP Storm Watch.
+                        </p>
+                    </div>
+
+                    <div class="date-info">
+                        <i class="bi bi-cpu-fill"></i>
+                        Device Management
+                    </div>
+
+                </div>
+
+
+                <!-- DEVICE STATISTICS -->
+
+                <div class="section-heading">
+                    <h5>Device Overview</h5>
+                    <span>Ringkasan perangkat</span>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <!-- TOTAL DEVICES -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Total Devices</span>
+                            <i class="bi bi-cpu-fill blue"></i>
+                        </div>
+
+                        <h2 id="totalDevices">—</h2>
+
+                        <small>Menunggu data backend</small>
+
+                    </div>
+
+
+                    <!-- ONLINE DEVICES -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Online Devices</span>
+                            <i class="bi bi-wifi cyan"></i>
+                        </div>
+
+                        <h2 id="onlineDevices">—</h2>
+
+                        <small>Menunggu status koneksi</small>
+
+                    </div>
+
+
+                    <!-- OFFLINE DEVICES -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Offline Devices</span>
+                            <i class="bi bi-wifi-off yellow"></i>
+                        </div>
+
+                        <h2 id="offlineDevices">—</h2>
+
+                        <small>Menunggu status koneksi</small>
+
+                    </div>
+
+
+                    <!-- LAST COMMUNICATION -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Last Communication</span>
+                            <i class="bi bi-clock-history purple"></i>
+                        </div>
+
+                        <h2 id="lastCommunication">—</h2>
+
+                        <small>Belum tersedia</small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEVICE TABLE -->
+
+                <div class="section-heading">
+
+                    <h5>Registered Devices</h5>
+
+                    <span>Daftar perangkat monitoring</span>
+
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="table-responsive">
+
+                        <table class="table custom-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Device ID</th>
+                                    <th>Device Name</th>
+                                    <th>Connection</th>
+                                    <th>Last Seen</th>
+                                    <th>Sensor Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="deviceTableBody">
+
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        Belum ada perangkat terdaftar
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEVICE INFORMATION -->
+
+                <div class="section-heading">
+
+                    <h5>Device Information</h5>
+
+                    <span>Informasi perangkat terpilih</span>
+
+                </div>
+
+
+                <div class="panel-card">
+
+                    <div class="device-empty-state">
+
+                        <i class="bi bi-cpu"></i>
+
+                        <h6>No Device Selected</h6>
+
+                        <p>
+                            Informasi perangkat akan ditampilkan
+                            setelah perangkat tersedia dan dipilih.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+        </main>
+
+    </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/devices.js"></script>
+    <script type="module" src="assets/js/api.js"></script>
+</body>
+</html>
