@@ -1,0 +1,77 @@
+
+/* =====================================
+   DEVICE MONITORING
+===================================== */
+
+.device-empty-state {
+    min-height: 200px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 25px;
+}
+
+.device-empty-state i {
+    font-size: 45px;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.device-empty-state h6 {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.device-empty-state p {
+    color: var(--text-secondary);
+    font-size: 11px;
+    line-height: 1.7;
+    max-width: 350px;
+}
+
+
+/* DEVICE STATUS */
+
+.device-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.device-status::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.device-status.online::before {
+    background: #22c55e;
+}
+
+.device-status.offline::before {
+    background: #ef4444;
+}
+
+.device-status.unknown::before {
+    background: #94a3b8;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .device-empty-state {
+        min-height: 170px;
+    }
+
+}
